@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import Mkcert from "vite-plugin-mkcert";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,5 +13,6 @@ export default defineConfig({
         plugins: [['babel-plugin-react-compiler']],
       },
     }),
+    Mkcert(),
   ],
 })
