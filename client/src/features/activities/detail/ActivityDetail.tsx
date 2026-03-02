@@ -1,17 +1,16 @@
 import {Button, Card, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import { useActivities } from "../../../lib/hooks/useActivities";
+import {Link, useNavigate, useParams} from "react-router";
 
-type Props = {
-    selectedActivity: Activity;
-    cancelSelectActivity: () => void;
-    openForm: (id: string) => void;
-};
-export const ActivityDetail = ({selectedActivity, cancelSelectActivity, openForm}: Props) => {
-    const {activities} = useActivities();
-    const activity = activities?.find(activity => activity.id === selectedActivity.id);
-    const {deleteActivity, } = useActivities();
+export const ActivityDetail = () => {
+    const navigate = useNavigate(); 
+    const { id } = useParams();
+    const { activity, isLoadingActivity } = useActivities(id)
+    const { deleteActivity } = useActivities();
+
+    if (isLoadingActivity) return <Typography>Loading...</Typography>;
+    if (!activity) return <Typography>Activity not found...</Typography>;
     
-    if (!activity) return <Typography>Loading...</Typography>;
     
     return (
         <Card>
@@ -25,18 +24,12 @@ export const ActivityDetail = ({selectedActivity, cancelSelectActivity, openForm
                 <Typography variant={"body1"}>{activity.description}</Typography>
             </CardContent>
           <CardActions>
-              <Button size={"small"} color={"primary"} onClick={() => openForm(activity.id)}>Edit</Button>
-              <Button size={"small"} color={"inherit"} onClick={cancelSelectActivity}>Cancel</Button>
+              <Button component={Link} to={`/activity/edit/${activity.id}`} size={"small"} color={"primary"}>Edit</Button>
+              <Button size={"small"} color={"inherit"} onClick={() => navigate('/activities')}>Cancel</Button>
               <Button 
                   size={"small"}
                   color={"error"}
-                  onClick={() => {
-                      deleteActivity.mutate(activity.id, {
-                          onSuccess: () => {
-                              cancelSelectActivity();
-                          }
-                      });
-                  }} 
+                  onClick={() => deleteActivity.mutate(activity.id)} 
                   loading={deleteActivity.isPending}>
                   Delete
               </Button>

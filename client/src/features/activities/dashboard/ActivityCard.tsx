@@ -1,10 +1,10 @@
 import {Button, Card, CardActions, CardContent, Chip, Typography} from "@mui/material";
+import { Link } from "react-router";
 
 type Props ={
     activity: Activity;
-    selectActivity: (id :string) => void;
 }
-export default function ActivityCard({activity, selectActivity}: Props) {
+export default function ActivityCard({ activity }: Props) {
     return (
         <Card>
             <CardContent>
@@ -17,7 +17,11 @@ export default function ActivityCard({activity, selectActivity}: Props) {
                     <Button 
                         size={"medium"} 
                         variant={"contained"} 
-                        onClick={() => selectActivity(activity.id)}>View</Button>
+                        component={Link}
+                        to={`/activity/detail/${activity.id}`}
+                        >
+                        View
+                    </Button>
                 </CardActions>
             </CardContent>
         </Card>    
